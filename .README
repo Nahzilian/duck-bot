@@ -1,0 +1,11 @@
+# Duck-bot
+
+## Overview
+
+- Persona chat-bot application using NodeJs
+
+## Dependencies:
+- axios
+- readline => terminal display (Removeable)
+- express
+- expressWs

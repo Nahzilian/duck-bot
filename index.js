@@ -1,17 +1,36 @@
-const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const express = require('express');
+const expressWs = require('express-ws');
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
+const app = express();
+expressWs(app);
 
-io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
-    });
-});
+const messages = [{id: 0, text: 'Welcome!', username:'Chat Room'}];
+// sockets represent the amount of user in one chat room
+const sockets = [];
 
-http.listen(3000, () => {
-  console.log('listening on *:3000');
-});
+app.use(express.json())
+
+
+app.listen(3001, ()=> {
+    console.log("Listening on port 3001");
+})
+
+app.get('/messages', (req,res) => {
+    res.json(messages)
+})
+
+app.post('/messages', (req, res) => {
+    const message = req.body;
+    messages.push(message);
+    // Send message to every client
+    for (const socket of sockets){
+        socket.send(JSON.stringify(message));
+    }
+})
+// Method to create web socket
+app.ws('/messages', socket => {
+    sockets.push(socket);
+    socket.on('close', () => {
+        sockets.splice(sockets.indexOf(socket),1);
+    })
+})
