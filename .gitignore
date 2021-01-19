@@ -1,1 +1,4 @@
 /node_modules/
+**/checkpoint
+**/model**
+.DS_Store
