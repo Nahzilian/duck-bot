@@ -8,12 +8,15 @@ from tensorflow.python.framework import ops
 import json
 import os
 import pickle
+from mongo_connect import load_db
+
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 stemmer = LancasterStemmer()
 
-with open('./data/intents.json') as file:
-    data = json.load(file)
+
+loaded_data = list(load_db())
+data = {"intents":loaded_data}
 
 training = []
 output = []
@@ -110,7 +113,6 @@ def chat():
         inp = input("You: ")
         if inp.lower() == "quit":
             break
-
         #Giving out probability
         results = model.predict([bag_of_words(inp, words)])[0]
         results_index = numpy.argmax(results)
@@ -123,4 +125,6 @@ def chat():
             print(random.choice(responses))
         else:
             print("Wdym?")
+            
 chat()
+    
