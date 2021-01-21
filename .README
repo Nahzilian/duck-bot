@@ -5,7 +5,15 @@
 - Persona chat-bot application using NodeJs
 
 ## Dependencies:
+Interface:
+NodeJs
 - axios
 - readline => terminal display (Removeable)
 - express
 - expressWs
+
+AI (python):
+- nltk
+- tflearn
+- tensorflow
+- numpy
