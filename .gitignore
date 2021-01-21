@@ -2,3 +2,4 @@
 **/checkpoint
 **/model**
 .DS_Store
+**/data.pickle
