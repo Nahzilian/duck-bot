@@ -3,3 +3,6 @@
 **/model**
 .DS_Store
 **/data.pickle
+
+**/__pycache__/
+**/log/
