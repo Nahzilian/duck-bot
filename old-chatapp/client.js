@@ -32,10 +32,6 @@ async function getAndDisplayMessages(){
     }
 }
 
-function pollMessages() {
-    setInterval(getAndDisplayMessages, 3000);
-}
-
 function streamMessages() {
     const messageingSocket = messageApi.createMessagingSocket();
 
@@ -46,10 +42,6 @@ function streamMessages() {
     });
 }
 
-if (process.env.MODE === 'poll'){
-    getAndDisplayMessages();
-    pollMessages();
-}else if(process.env.MODE === 'stream'){
-    getAndDisplayMessages();
-    streamMessages();
-}
+
+getAndDisplayMessages();
+streamMessages();

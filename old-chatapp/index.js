@@ -20,6 +20,7 @@ app.get('/messages', (req,res) => {
 })
 
 app.post('/messages', (req, res) => {
+    console.log(req)
     const message = req.body;
     messages.push(message);
     // Send message to every client

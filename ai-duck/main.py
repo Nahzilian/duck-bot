@@ -8,7 +8,7 @@ from tensorflow.python.framework import ops
 import json
 import os
 import pickle
-from mongo_connect import load_db
+from mongo_connect import load_db, create_new_tag
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
@@ -18,15 +18,14 @@ stemmer = LancasterStemmer()
 loaded_data = list(load_db())
 data = {"intents":loaded_data}
 
-training = []
-output = []
-
 
 def retrain_model():
     words = []
     labels = []
     docs_x = []
     docs_y = []
+    training = []
+    output = []
 
     for intent in data["intents"]:
         for pattern in intent["patterns"]:
@@ -79,7 +78,7 @@ try:
 except:
     retrain_model()
 
-
+retrain_model()
 ops.reset_default_graph()
 # Start with the length of input data
 net = tflearn.input_data(shape=[None, len(training[0])]) # The input layers
@@ -107,24 +106,24 @@ def bag_of_words(s,words):
                 bag[i] = 1
     return numpy.array(bag)
 
-def chat():
-    print("Start talking with the bot")
-    while True:
-        inp = input("You: ")
-        if inp.lower() == "quit":
-            break
-        #Giving out probability
-        results = model.predict([bag_of_words(inp, words)])[0]
-        results_index = numpy.argmax(results)
-        tag = labels[results_index]
+def chat(message):
+    responses = ''
+    #Giving out probability
+    results = model.predict([bag_of_words(message, words)])[0]
+    results_index = numpy.argmax(results)
+    tag = labels[results_index]
 
-        if results[results_index] > 0.85:
-            for tg in data["intents"]:
-                if tg['tag'] == tag:
-                    responses = tg["responses"]
-            print(random.choice(responses))
-        else:
-            print("Wdym?")
-            
-chat()
-    
+    if results[results_index] > 0.85:
+        for tg in data["intents"]:
+            if tg['tag'] == tag:
+                responses = tg["responses"]
+        responses = random.choice(responses)
+    else:
+        responses = 'Wdym?'
+    return responses
+
+def learn_new(message):
+    # Find the heaviest word in the sentence, then create new tag
+    #create_new_tag()
+    print()
+

@@ -17,3 +17,5 @@ AI (python):
 - tflearn
 - tensorflow
 - numpy
+- websocket
+- request

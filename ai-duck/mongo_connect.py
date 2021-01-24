@@ -57,4 +57,3 @@ def update_tag(data_type: str,new_data: str,tag: str,remove_type: bool):
             result = db.chatapp.update_one({'_id': selected_data.get('_id')}, {mongo_command: {'responses': new_data}})
         else:
             print("update type was not found")
-
